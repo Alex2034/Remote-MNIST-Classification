@@ -97,16 +97,17 @@ set(SOURCES
 
 
 # Add libraries
-# find_package(Torch PATHS "${CMAKE_PREFIX_PATH}/libtorch/share/cmake/Torch"
-#     NO_DEFAULT_PATH REQUIRED)
+find_package(Torch PATHS "${CMAKE_PREFIX_PATH}/libtorch/share/cmake/Torch"
+    NO_DEFAULT_PATH REQUIRED)
 find_package(OpenCV PATHS "${CMAKE_PREFIX_PATH}/opencv-4.x/build"
     NO_DEFAULT_PATH REQUIRED)
 
-add_executable(digit-classification-model ${SOURCES} "${TORCH_INCLUDE_DIRS}/torch/script.h")  #  ${HEADERS}
+add_executable(digit-classification-model ${SOURCES})  #  ${HEADERS}
 
 # Compile features (maybe add them with options instead?)
 target_compile_features(digit-classification-model PRIVATE cxx_std_17)
-target_compile_options(digit-classification-model PRIVATE -Wall -Wextra -O2)
+# target_compile_options(digit-classification-model PRIVATE -Wall -Wextra -O2)
+target_compile_options(digit-classification-model PRIVATE -O2)
 
 message(STATUS "CVINCLUDE: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "CVLIB: ${OpenCV_LIBRARIES}")
