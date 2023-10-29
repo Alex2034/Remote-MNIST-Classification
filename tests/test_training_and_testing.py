@@ -42,7 +42,7 @@ class TestTrainingAndTesting(unittest.TestCase):
 
     def test_train_model(self):
         initial_state_dict = {name: param.clone() for name, param in self.model.state_dict().items()}
-        loss = train_model(self.model, self.device, self.mock_train_loader, self.optimizer, 1)
+        loss = train_model(self.model, self.device, self.mock_train_loader, self.optimizer, 1, 1)
 
         # Check that at least one parameter has changed after training
         for name, param in self.model.state_dict().items():
