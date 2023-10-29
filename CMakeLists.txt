@@ -23,6 +23,12 @@ project(remote-mnist-classification
 #   set(CMAKE_INSTALL_PREFIX <path> CACHE PATH <comment> FORCE)
 # endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
+# set(LIB_INCLUDE_DIR "" CACHE FILEPATH "Path to external lib includes")
+#
+# if(NOT EXISTS ${LIB_INCLUDE_DIR}/header.h)
+#   message(SEND_ERROR "Can't find header.h in ${LIB_INCLUDE_DIR}")
+# endif()
+
 
 # Support folders in IDEs
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -51,14 +57,14 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 # The following code block is suggested to be used on Windows.
 # According to https://github.com/pytorch/pytorch/issues/25457,
 # the DLLs need to be copied to avoid memory errors.
-if (MSVC)
-  file(GLOB TORCH_DLLS "${TORCH_INSTALL_PREFIX}/lib/*.dll")
-  add_custom_command(TARGET example-app
-                     POST_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                     ${TORCH_DLLS}
-                     $<TARGET_FILE_DIR:example-app>)
-endif (MSVC)
+# if (MSVC)
+#   file(GLOB TORCH_DLLS "${TORCH_INSTALL_PREFIX}/lib/*.dll")
+#   add_custom_command(TARGET example-app
+#                      POST_BUILD
+#                      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#                      ${TORCH_DLLS}
+#                      $<TARGET_FILE_DIR:example-app>)
+# endif (MSVC)
 
 
 ### Require out-of-source builds
@@ -80,29 +86,34 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 set(SOURCES
-    main.cpp
+    app.cpp
 )
 
 # set(HEADERS
-#
+#     torch/script.h
+#     opencv2/highgui/highgui.hpp
+#     opencv2/core/core.hpp
 # )
 
 
-# Add and configure dynamic libraries
-find_package(OpenCV REQUIRED)
+# Add libraries
+find_package(Torch PATHS "${CMAKE_PREFIX_PATH}/libtorch/share/cmake/Torch"
+    NO_DEFAULT_PATH REQUIRED)
+find_package(OpenCV PATHS "${CMAKE_PREFIX_PATH}/opencv-4.x/build"
+    NO_DEFAULT_PATH REQUIRED)
 
-message(STATUS "CVINCLUDE: ${OpenCV_INCLUDE_DIRS}")
-include_directories(${OpenCV_INCLUDE_DIRS} ${TORCH_INCLUDE_DIRS})
-
-
-find_package(Torch REQUIRED)
-
-add_executable(digit-classification-model ${SOURCES} ${HEADERS})
-
+add_executable(digit-classification-model ${SOURCES})  #  ${HEADERS}
 
 # Compile features (maybe add them with options instead?)
 target_compile_features(digit-classification-model PRIVATE cxx_std_17)
-target_compile_options(digit-classification-model PRIVATE -Wall -Wextra -O2)
+# target_compile_options(digit-classification-model PRIVATE -Wall -Wextra -O2)
+target_compile_options(digit-classification-model PRIVATE -O2)
 
+message(STATUS "CVINCLUDE: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "CVLIB: ${OpenCV_LIBRARIES}")
+message(STATUS "TORCHINCLUDE: ${TORCH_INCLUDE_DIRS}")
+message(STATUS "TORCHLIB: ${TORCH_LIBRARIES}")
+target_include_directories(digit-classification-model PRIVATE
+    "${OpenCV_INCLUDE_DIRS}" "${TORCH_INCLUDE_DIRS}")
 
-target_link_libraries(digit-classification-model ${TORCH_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(digit-classification-model "${OpenCV_LIBS}" "${TORCH_LIBRARIES}")
