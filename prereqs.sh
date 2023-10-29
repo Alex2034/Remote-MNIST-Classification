@@ -24,8 +24,8 @@ lib_dir=$(cd "${lib_dir}"; pwd)
 echo "Proceeding to download project prerequisites to \`${lib_dir}\` directory..."
 
 ### Torch
-# libtorch_url="https://download.pytorch.org/libtorch/nightly/cpu/libtorch-shared-with-deps-latest.zip"
-libtorch_url="https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcu118.zip"
+libtorch_url="https://download.pytorch.org/libtorch/nightly/cpu/libtorch-shared-with-deps-latest.zip"
+# libtorch_url="https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcu118.zip"
 
 wget  -O "${lib_dir}/torch.zip" "${libtorch_url}"
 echo "Unpacking..."
