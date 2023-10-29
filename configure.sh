@@ -14,7 +14,7 @@ done
 
 build_dir="${b:-build}"
 
-mkdir "${build_dir}"  # && cd build
+mkdir -p "${build_dir}"  # && cd build
 
 echo "Proceeding to configure the project in \`${build_dir}\` directory..."
 
