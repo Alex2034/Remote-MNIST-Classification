@@ -18,6 +18,12 @@ project(remote-mnist-classification
 )
 
 
+### probably less forceful to set as a cmd opt to cmake
+# if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+#   set(CMAKE_INSTALL_PREFIX <path> CACHE PATH <comment> FORCE)
+# endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
+
 # Support folders in IDEs
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
