@@ -35,6 +35,7 @@ def train_model(model, device, train_loader, optimizer, epoch):
         optimizer.step()
         if batch_idx == 0:
             print(f'Training Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
+        return loss.item()
 
 def test_model(model, device, test_loader):
     model.eval()
@@ -49,9 +50,11 @@ def test_model(model, device, test_loader):
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= len(test_loader.dataset)
+    accuracy = 100. * correct / len(test_loader.dataset)
     print(f'\nTest set: Average loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)} ({100. * correct / len(test_loader.dataset):.0f}%)\n')
+    return test_loss, accuracy
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                         help='input batch size for training (default: 64)')
@@ -69,7 +72,10 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                         help='how many batches to wait before logging training status')
-    args = parser.parse_args()
+
+    return parser.parse_args()
+
+def main(args):
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     print(use_cuda)
     torch.manual_seed(args.seed)
@@ -131,5 +137,6 @@ def save_model():
 
 if __name__ == '__main__':
     # main() creates the model.pth. save_model() takes the model.pth and random input and creates model.pt.
-    main()
+    args = parse_args()
+    main(args)
     save_model()
