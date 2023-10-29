@@ -22,5 +22,7 @@ build_dir="${b:-build}"
 
 bash configure.sh -b "${build_dir}"  # -j $job_number 
 
+build_dir=$(cd "${build_dir}"; pwd)
+
 cmake --build "${build_dir}" -j $job_number \
 	-- -j $job_number -v -d -p
