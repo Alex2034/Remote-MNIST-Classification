@@ -116,4 +116,4 @@ message(STATUS "TORCHLIB: ${TORCH_LIBRARIES}")
 target_include_directories(digit-classification-model PRIVATE
     "${OpenCV_INCLUDE_DIRS}" "${TORCH_INCLUDE_DIRS}")
 
-target_link_libraries(digit-classification-model "${OpenCV_LIBS}")  #  "${TORCH_LIBRARIES}"
+target_link_libraries(digit-classification-model "${OpenCV_LIBS}" "${TORCH_LIBRARIES}")
