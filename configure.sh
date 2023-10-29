@@ -6,7 +6,7 @@ while getopts 'b:l:hi' flag; do
 		b) b="${OPTARG}" ;;
 		l) l="${OPTARG}" ;;
 		h) echo "Configure the project";
-			echo "Usage: ./configure.sh [-b <build_dir> -l <lib_dir>]";
+			echo "Usage: ./configure.sh [-b <build_dir> -l <lib_dir> -i]";
 			echo -e "\t-b <build_dir>";
 			echo -e "\t\tallows to specify the build directory;";
 			echo -e "\t\tdefaults to \`build\`";
@@ -14,6 +14,8 @@ while getopts 'b:l:hi' flag; do
 			echo -e "\t\tallows to specify the lib dir";
 			echo -e "\t\tinside the current directory;";
 			echo -e "\t\tdefaults to \`lib\`";
+			echo -e "\t-i";
+			echo -e "\t\t download, build prerequisites (\`./prereqs.sh\`)";
 			exit 0 ;;
 		i) i=1 ;;
 	esac
@@ -38,5 +40,7 @@ echo "Proceeding to configure the project in \`${build_dir}\` directory..."
 cmake -DCMAKE_PREFIX_PATH="${lib_dir}" \
 	-S . -B "${build_dir}" \
 	-DCMAKE_CXX_FLAGS="-Wall -Wextra" \
+	-UTORCH_LIBRARIES -UTORCH_INCLUDE_DIRS -UOpenCV_INCLUDE_DIRS \
+	-DTORCH_LIBRARIES="${lib_dir}/libtorch/lib" \
 	-DTORCH_INCLUDE_DIRS="${lib_dir}/libtorch/include" \
 	-DOpenCV_INCLUDE_DIRS="${lib_dir}/opencv-4.x/include" \
