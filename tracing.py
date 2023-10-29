@@ -35,7 +35,7 @@ def train_model(model, device, train_loader, optimizer, epoch, epochs):
         optimizer.step()
         if batch_idx == 0:
             print(f'Training Epoch: {epoch}/{epochs} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
-        return loss.item()
+    return loss.item()
 
 def test_model(model, device, test_loader):
     model.eval()
