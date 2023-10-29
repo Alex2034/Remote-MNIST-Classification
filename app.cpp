@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include <torch/script.h>
-
 #include <iostream>
 #include <memory>
+
+#include <torch/script.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
