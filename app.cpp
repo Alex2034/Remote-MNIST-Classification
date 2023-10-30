@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 
-#include <torch/script.h>
+#include "torch/script.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -37,4 +37,6 @@ int main(int argc, const char* argv[]) {
     auto maxResult = result.max(1, true);
     auto maxIndex = std::get<1>(maxResult).item<float>();
     std::cout << maxIndex << "\n";
+
+	return 0;
 }
