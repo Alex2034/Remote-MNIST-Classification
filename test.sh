@@ -30,4 +30,5 @@ done
 
 # Run the tests
 echo "Running tests with $PYTHON_EXECUTABLE..."
-$PYTHON_EXECUTABLE -m unittest discover -s tests -p "test_*.py"
+$PYTHON_EXECUTABLE -m coverage run -m \
+  unittest discover -s tests  # -p "test_*.py"

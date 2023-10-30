@@ -29,7 +29,7 @@ To build:
 To test (WIP):
 
 ```bash
-./test.sh
+./test.sh [-p <python-executable-to-use>]
 ```
 
 N. B.! You might need to make the scripts used above executable
