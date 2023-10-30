@@ -6,6 +6,9 @@ include(FetchContent)  # very useful
 include(CMakeDependentOption)
 include(CheckCXXSymbolExists)
 
+option(BUILD_SHARED_LIBS "Build using shared libraries (don't)" OFF)
+
+
 project(remote-mnist-classification
   VERSION
     1.0
@@ -38,7 +41,7 @@ set(CMAKE_CXX_STANDARD 17 CACHE STRING
 	"The C++17 is standard to use nowadays, if not C++20.")
 option(CMAKE_CXX_STANDARD_REQUIRED
 	"When enabled, the value of CMAKE_CXX_STANDARD is a requirement."
-	ON)
+	YES)
 option(CMAKE_CXX_EXTENSIONS
 	"When enabled, compiler-specific language extensions are enabled (e.g. -std=gnu++17)"
 	OFF)
@@ -97,8 +100,10 @@ set(SOURCES
 
 
 # Add libraries
-find_package(Torch PATHS "${CMAKE_PREFIX_PATH}/libtorch/share/cmake/Torch"
+# find_package(Torch REQUIRED)
+find_package(Torch PATHS "${CMAKE_PREFIX_PATH}/libtorch"
     NO_DEFAULT_PATH REQUIRED)
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 find_package(OpenCV PATHS "${CMAKE_PREFIX_PATH}/opencv-4.x/build"
     NO_DEFAULT_PATH REQUIRED)
 
@@ -113,7 +118,10 @@ message(STATUS "CVINCLUDE: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "CVLIB: ${OpenCV_LIBRARIES}")
 message(STATUS "TORCHINCLUDE: ${TORCH_INCLUDE_DIRS}")
 message(STATUS "TORCHLIB: ${TORCH_LIBRARIES}")
+# TORCH_LIBRARIES=
+# target_include_directories(digit-classification-model PRIVATE
+#     "${OpenCV_INCLUDE_DIRS}" "${TORCH_INCLUDE_DIRS}")
 target_include_directories(digit-classification-model PRIVATE
-    "${OpenCV_INCLUDE_DIRS}" "${TORCH_INCLUDE_DIRS}")
+    "${TORCH_INCLUDE_DIRS}" "${OpenCV_INCLUDE_DIRS}")  # "${TORCH_INCLUDE_DIRS}"
 
-target_link_libraries(digit-classification-model "${OpenCV_LIBS}" "${TORCH_LIBRARIES}")
+target_link_libraries(digit-classification-model "${TORCH_LIBRARIES}" "${OpenCV_LIBS}")
