@@ -24,7 +24,7 @@ class NeuralNetwork(nn.Module):
         x = self.fc_layer2(x)
         return F.log_softmax(x, dim=1)
 
-def train_model(model, device, train_loader, optimizer, epoch):
+def train_model(model, device, train_loader, optimizer, epoch, epochs):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -34,8 +34,8 @@ def train_model(model, device, train_loader, optimizer, epoch):
         loss.backward()
         optimizer.step()
         if batch_idx == 0:
-            print(f'Training Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
-        return loss.item()
+            print(f'Training Epoch: {epoch}/{epochs} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
+    return loss.item()
 
 def test_model(model, device, test_loader):
     model.eval()
@@ -102,7 +102,7 @@ def main(args):
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     for epoch in range(1, args.epochs + 1):
-        train_model(model, device, train_loader, optimizer, epoch)
+        train_model(model, device, train_loader, optimizer, epoch, args.epochs)
         test_model(model, device, test_loader)
 
     torch.save(model, "model.pth")
