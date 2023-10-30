@@ -34,8 +34,12 @@ wd=$(pwd)
 cd "${lib_dir}"
 echo "Cloning Torch..."
 git clone -b main --recurse-submodule "${libtorch_url}"
+cd pytorch
 git submodule update --init --recursive
-mkdir libtorch && cd libtorch
+cd third_party
+git submodule update --init --recursive
+cd ../..
+mkdir -p libtorch && cd "${lib_dir}/libtorch"
 echo "Building Torch..."
 cmake \
 -DCMAKE_VERBOSE_MAKEFILE:BOOL=1 \
@@ -62,9 +66,10 @@ cmake \
 -DPYTHON_EXECUTABLE:PATH=`which python3` \
 -DUSE_MKLDNN=OFF \
 -DBLAS=OpenBLAS \
--DCMAKE_INSTALL_PREFIX:PATH=../libtorch \
+-DCMAKE_INSTALL_PREFIX:PATH=../libtorch_cpu \
 ../pytorch
-cmake --build . --target install -- "-j8"
+cmake --build . --target install -- "-j8"  # -w
+# cmake --build . -- "-j8" -w
 cd "${wd}"
 # wget  -O "${lib_dir}/torch.zip" "${libtorch_url}"
 # echo "Unpacking..."
@@ -76,27 +81,29 @@ echo "Done."
 # opencv_url="https://github.com/opencv/opencv/archive/4.x.zip"
 opencv_url="https://github.com/opencv/opencv.git"
 echo "Cloning OpenCV..."
+cd "${lib_dir}"
 git clone "${opencv_url}"
+cd "${wd}"
 # wget -O "${lib_dir}/opencv.zip" "${opencv_url}"
 # echo "Unpacking..."
-unzip "${lib_dir}/opencv.zip" -d "${lib_dir}"; rm "${lib_dir}/opencv.zip"
-
-cp -R "${lib_dir}/opencv-4.x/modules/core/include/opencv2/." \
-	"${lib_dir}/opencv-4.x/include/opencv2/"
-cp -R "${lib_dir}/opencv-4.x/modules/highgui/include/opencv2/." \
-	"${lib_dir}/opencv-4.x/include/opencv2/"
+# unzip "${lib_dir}/opencv.zip" -d "${lib_dir}"; rm "${lib_dir}/opencv.zip"
+#
+# cp -R "${lib_dir}/opencv/modules/core/include/opencv2/." \
+# 	"${lib_dir}/opencv/include/opencv2/"
+# cp -R "${lib_dir}/opencv/modules/highgui/include/opencv2/." \
+# 	"${lib_dir}/opencv/include/opencv2/"
 echo "Done."
 #
 # # Create build directory
 echo "Building OpenCV..."
 
 # Configure
-mkdir -p "${lib_dir}/opencv-4.x/build"
+mkdir -p "${lib_dir}/opencv/build"
 cmake -D CMAKE_BUILD_TYPE=Release -D GLIBCXX_USE_CXX11_ABI=0 \
-	-S "${lib_dir}/opencv-4.x" -B "${lib_dir}/opencv-4.x/build" \
+	-S "${lib_dir}/opencv" -B "${lib_dir}/opencv/build" \
 	-DBUILD_SHARED_LIBS=OFF -DBUILD_LIST=core,highgui,imgcodecs,imgproc
 
 # Build
-cmake --build "${lib_dir}/opencv-4.x/build"
-cp -R "${lib_dir}/opencv-4.x/build/opencv2/." "${lib_dir}/opencv-4.x/include/opencv2/"
+cmake --build "${lib_dir}/opencv/build"
+# cp -R "${lib_dir}/opencv/build/opencv2/." "${lib_dir}/opencv/include/opencv2/"
 echo "Done."
