@@ -39,8 +39,9 @@ echo "Proceeding to configure the project in \`${build_dir}\` directory..."
 
 cmake -DCMAKE_PREFIX_PATH="${lib_dir}" \
 	-S . -B "${build_dir}" \
-	-UTORCH_LIBRARIES -UTORCH_INCLUDE_DIRS -UOpenCV_INCLUDE_DIRS \
-	-DTORCH_LIBRARIES="${lib_dir}/libtorch/lib" \
-	-DTORCH_INCLUDE_DIRS="${lib_dir}/libtorch/include" \
-	-DOpenCV_INCLUDE_DIRS="${lib_dir}/opencv-4.x/include"
+	 -DBUILD_SHARED_LIBS=OFF  # \
+# 	-UTORCH_LIBRARIES -UTORCH_INCLUDE_DIRS -UOpenCV_INCLUDE_DIRS \
+# 	-DTORCH_LIBRARIES="${lib_dir}/libtorch/lib" \
+# 	-DTORCH_INCLUDE_DIRS="${lib_dir}/libtorch/include" \
+# 	-DOpenCV_INCLUDE_DIRS="${lib_dir}/opencv-4.x/include"
 #	-DCMAKE_CXX_FLAGS="-Wall -Wextra"

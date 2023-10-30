@@ -40,11 +40,7 @@ fi
 build_dir=$(cd "${build_dir}"; pwd)
 lib_dir=$(cd "${lib_dir}"; pwd)
 
-CMAKE_PREFIX_PATH="${lib_dir}" \
-	TORCH_LIBRARIES="${lib_dir}/libtorch/lib" \
-	TORCH_INCLUDE_DIRS="${lib_dir}/libtorch/include" \
-	OpenCV_INCLUDE_DIRS="${lib_dir}/opencv-4.x/include"\
-	cmake --build "${build_dir}"
+CMAKE_PREFIX_PATH="${lib_dir}" cmake --build "${build_dir}"
 # 	-DCMAKE_CXX_FLAGS="-Wall -Wextra" \
 # 	-UTORCH_LIBRARIES -UTORCH_INCLUDE_DIRS -UOpenCV_INCLUDE_DIRS \
 # 	-DTORCH_LIBRARIES="${lib_dir}/libtorch/libs" \
